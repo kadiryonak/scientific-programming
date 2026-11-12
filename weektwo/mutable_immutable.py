@@ -1,158 +1,351 @@
-# Mutable = Değiştirilebilir 
-# Python'daki bir nesnenin oluşturulduktan sonra aynı nesne 
-#olarak değiştirilebilir olup olmadığınını anlatıyor
+# ============================================================
+# 1) == ve is FARKI
+# ============================================================
+
+print("----- == ve is -----")
+
+list_a = [1, 2, 3]
+list_b = [1, 2, 3]
+
+# == değerlerin eşit olup olmadığına bakar
+print(list_a == list_b)     # True
+
+# is aynı nesne olup olmadığına bakar
+print(list_a is list_b)     # False
+
+# Değerleri aynı ama bellekte farklı iki liste nesnesidir.
+
+print(id(list_a))
+print(id(list_b))
+
+
+# ============================================================
+# 2) MUTABLE
+# ============================================================
+
+print("\n----- Mutable -----")
+
+# Mutable = Değiştirilebilir
+# Bir nesnenin oluşturulduktan sonra
+# aynı nesne olarak değiştirilebilir olmasıdır.
+
+# Mutable örnekleri:
 # list
 # dict
 # set
-print("-----Mutable------ ")
 
-a = [1,2,3,4]  # Liste
+mutable_list = [1, 2, 3, 4]
 
-print(id(a))
-#140571798559488
+print("İlk hali:", mutable_list)
+print("İlk id:", id(mutable_list))
 
-a.append(4)
+mutable_list.append(5)
 
-print(a)
+print("Yeni hali:", mutable_list)
+print("Son id:", id(mutable_list))
 
-print(id(a))
-# 139837992491776
-
-
+# append() mevcut listeyi değiştirdi.
+# Yeni bir liste oluşturulmadığı için id aynı kalır.
 
 
+# ============================================================
+# 3) IMMUTABLE
+# ============================================================
 
+print("\n----- Immutable -----")
 
-# # immutable 
+# Immutable = Değiştirilemez
+
+# Immutable örnekleri:
 # int
 # float
+# bool
 # str
 # tuple
 # frozenset
-# bunlar immutable tipler
-print("-----Imutable------ ")
-m = 10 
-print(id(m))
 
-m+=1
-print(id(m))
+immutable_number = 10
 
-# 139809305578704
-# 139809305578736
+print("İlk değer:", immutable_number)
+print("İlk id:", id(immutable_number))
 
+immutable_number += 1
 
-x = 100
-y = x
+print("Yeni değer:", immutable_number)
+print("Son id:", id(immutable_number))
 
-print(id(x), id(y), x is y)
-
-y = y + 1 # yeni bir int değeri atıldı yani yeri değişti  100 iken --> 101 oldu
-
-print(id(x), id(y), x is y)
-
-print("Aliasing")
-a = [1, 2, 3]
-
-b = a
-
-b.append(5)
-
-print(a)
+# 10 nesnesi 11'e dönüştürülmedi.
+# Yeni bir int nesnesi oluştu.
+# immutable_number artık yeni nesneyi gösteriyor.
 
 
-print("-----Copy------ ")
+# ============================================================
+# 4) IMMUTABLE NESNEDE İKİ REFERANS
+# ============================================================
 
+print("\n----- Immutable Referans Örneği -----")
+
+number_one = 100
+number_two = number_one
+
+print(id(number_one))
+print(id(number_two))
+print(number_one is number_two)     # True
+
+number_two = number_two + 1
+
+# 100 nesnesi değişmedi.
+# number_two artık yeni 101 nesnesini gösteriyor.
+
+print("number_one:", number_one)
+print("number_two:", number_two)
+
+print(id(number_one))
+print(id(number_two))
+print(number_one is number_two)     # False
+
+
+# ============================================================
+# 5) ALIASING
+# ============================================================
+
+print("\n----- Aliasing -----")
+
+original_list = [1, 2, 3]
+
+alias_list = original_list
+
+# Burada kopya oluşturulmadı.
+# İki değişken aynı listeyi gösteriyor.
+
+print(original_list is alias_list)     # True
+
+alias_list.append(5)
+
+print("original_list:", original_list)
+print("alias_list:", alias_list)
+
+# İkisi de:
+# [1, 2, 3, 5]
+
+# Çünkü aynı liste nesnesini gösteriyorlar.
+
+
+# ============================================================
+# 6) ALIAS vs SHALLOW COPY vs DEEP COPY
+# ============================================================
+
+print("\n----- Copy -----")
 
 import copy
 
-k = [1,2,3]
-l = k
-m = k.copy()
-n = copy.deepcopy(k)
+copy_original = [1, 2, 3]
 
-k.append(4)
+copy_alias = copy_original
+copy_shallow = copy_original.copy()
+copy_deep = copy.deepcopy(copy_original)
 
-print("k:", k)
-print("l (alias):", l)
-print("m (shallow):", m)
-print("n (deep):", n)
+copy_original.append(4)
 
-# k: [1, 2, 3, 4]
-# l (alias): [1, 2, 3, 4]
-# m (shallow): [1, 2, 3]
-# n (deep): [1, 2, 3]
+print("original:", copy_original)
+print("alias:", copy_alias)
+print("shallow:", copy_shallow)
+print("deep:", copy_deep)
 
-
-print("----- Shallow Copy Nested List ------")
-
-p = [[1, 2], [3, 4]]
-
-q = p.copy()
-
-q[0].append(99)
-
-print("p:", p)
-print("q:", q)
-
-# p: [[1, 2, 99], [3, 4]]
-# q: [[1, 2, 99], [3, 4]]
-
-print("----- Shallow Copy ID Kontrol ------")
-
-r = [[10, 20], [30, 40]]
-
-s = r.copy()
-
-print("Dış liste:")
-print(id(r))
-print(id(s))
-
-print("İç liste:")
-print(id(r[0]))
-print(id(s[0]))
-
-print("----- Deep Copy ------")
-
-u = [[1, 2], [3, 4]]
-
-v = copy.deepcopy(u)
-
-v[0].append(42)
-
-print("u:", u)
-print("v:", v)
+# original: [1, 2, 3, 4]
+# alias:    [1, 2, 3, 4]
+# shallow:  [1, 2, 3]
+# deep:     [1, 2, 3]
 
 
-print("----- Deep Copy ID Kontrol ------")
+# ============================================================
+# 7) SHALLOW COPY - NESTED LIST
+# ============================================================
 
-w = [[5, 6], [7, 8]]
+print("\n----- Shallow Copy Nested List -----")
 
-z = copy.deepcopy(w)
+nested_original = [[1, 2], [3, 4]]
 
-print("Dış liste:")
-print(id(w))
-print(id(z))
+nested_shallow = nested_original.copy()
 
-print("İç liste:")
-print(id(w[0]))
-print(id(z[0]))
+nested_shallow[0].append(99)
+
+print("original:", nested_original)
+print("shallow:", nested_shallow)
+
+# original: [[1, 2, 99], [3, 4]]
+# shallow:  [[1, 2, 99], [3, 4]]
+
+# Neden?
+#
+# Dış liste kopyalandı.
+# Ama iç listeler kopyalanmadı.
+#
+# İki dış liste aynı iç liste nesnelerini gösteriyor.
 
 
-list_one = list_two = [1, 2, 3]
+# ============================================================
+# 8) SHALLOW COPY - ID KONTROLÜ
+# ============================================================
 
-list_two.append(5)
+print("\n----- Shallow Copy ID Kontrol -----")
 
-print(list_one)
-# [1, 2, 3, 5]
+shallow_original = [[10, 20], [30, 40]]
+shallow_copy = shallow_original.copy()
+
+print("Dış listelerin id değerleri:")
+
+print(id(shallow_original))
+print(id(shallow_copy))
+
+# Farklı olmalı.
+# Çünkü dış liste kopyalandı.
 
 
+print("İlk iç listelerin id değerleri:")
 
-num_one, num_two = 1, 2
+print(id(shallow_original[0]))
+print(id(shallow_copy[0]))
 
-print(num_one, num_two)
-# 1 2
+# Aynı olmalı.
+# Çünkü shallow copy iç nesneleri kopyalamaz.
+
+
+print(
+    "Dış liste aynı mı?",
+    shallow_original is shallow_copy
+)
+
+print(
+    "İç liste aynı mı?",
+    shallow_original[0] is shallow_copy[0]
+)
+
+
+# ============================================================
+# 9) DEEP COPY
+# ============================================================
+
+print("\n----- Deep Copy -----")
+
+deep_original = [[1, 2], [3, 4]]
+
+deep_copy = copy.deepcopy(deep_original)
+
+deep_copy[0].append(42)
+
+print("original:", deep_original)
+print("deep copy:", deep_copy)
+
+# original:
+# [[1, 2], [3, 4]]
+
+# deep copy:
+# [[1, 2, 42], [3, 4]]
+
+# deepcopy iç nesneleri de kopyaladığı için
+# original etkilenmez.
+
+
+# ============================================================
+# 10) DEEP COPY - ID KONTROLÜ
+# ============================================================
+
+print("\n----- Deep Copy ID Kontrol -----")
+
+deep_id_original = [[5, 6], [7, 8]]
+
+deep_id_copy = copy.deepcopy(deep_id_original)
+
+print("Dış listelerin id değerleri:")
+
+print(id(deep_id_original))
+print(id(deep_id_copy))
+
+print("İç listelerin id değerleri:")
+
+print(id(deep_id_original[0]))
+print(id(deep_id_copy[0]))
+
+# Hem dış hem iç nesnelerin id değerleri farklıdır.
+
+print(
+    "Dış liste aynı mı?",
+    deep_id_original is deep_id_copy
+)
+
+print(
+    "İç liste aynı mı?",
+    deep_id_original[0] is deep_id_copy[0]
+)
+
+
+# ============================================================
+# 11) MULTIPLE ASSIGNMENT İLE ALIASING
+# ============================================================
+
+print("\n----- Multiple Assignment Aliasing -----")
+
+first_list = second_list = [1, 2, 3]
+
+second_list.append(5)
+
+print("first_list:", first_list)
+print("second_list:", second_list)
+
+print(first_list is second_list)     # True
+
+# first_list ve second_list
+# aynı liste nesnesini gösteriyor.
+
+
+# ============================================================
+# 12) MULTIPLE ASSIGNMENT VE SWAP
+# ============================================================
+
+print("\n----- Swap -----")
+
+num_one = 1
+num_two = 2
+
+print("Önce:", num_one, num_two)
 
 num_one, num_two = num_two, num_one
 
-print(num_one, num_two)
-# 2 1
+print("Sonra:", num_one, num_two)
+
+# Geçici bir üçüncü değişken kullanmadan
+# değerleri yer değiştirdik.
+
+
+# ============================================================
+# 13) TUPLE IMMUTABLE AMA İÇİNDE MUTABLE NESNE OLABİLİR
+# ============================================================
+
+print("\n----- Tuple ve Mutable İç Nesne -----")
+
+tuple_example = ([1, 2], [3, 4])
+
+print("İlk hali:", tuple_example)
+
+tuple_example[0].append(5)
+
+print("Son hali:", tuple_example)
+
+# Çıktı:
+# ([1, 2, 5], [3, 4])
+
+# Tuple immutable'dır.
+# Yani tuple içerisindeki referansları değiştiremeyiz.
+
+# Fakat tuple'ın içindeki liste mutable olduğu için
+# listenin kendisini değiştirebiliriz.
+
+
+# Örneğin aşağıdaki işlem yapılamaz:
+
+# tuple_example[0] = [10, 20]
+
+# TypeError verir.
+# Çünkü burada tuple'ın elemanını başka bir nesneyle
+# değiştirmeye çalışıyoruz.
